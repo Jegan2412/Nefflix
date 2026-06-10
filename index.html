@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Nefflix — Happy you, Happy us</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --deep:    #0a1f10;
+    --forest:  #0d2818;
+    --emerald: #1a5c35;
+    --mid:     #2d8653;
+    --mint:    #4caf78;
+    --lime:    #a8e6be;
+    --glow:    #7dffb0;
+    --cream:   #f2fbf5;
+    --white:   #ffffff;
+    --red:     #e63946;
+    --gold:    #f4c430;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--forest);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--deep); }
+  ::-webkit-scrollbar-thumb { background: var(--mint); border-radius: 3px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 2.5rem;
+    background: rgba(10, 31, 16, 0.72);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(76, 175, 120, 0.18);
+    transition: padding 0.3s;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.65rem;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    color: var(--glow);
+    text-shadow: 0 0 20px rgba(125,255,176,0.5);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--white); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--lime);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0; right: 0;
+    height: 1px; background: var(--glow);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .nav-links a:hover { color: var(--glow); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  .nav-cta {
+    background: var(--mint);
+    color: var(--deep) !important;
+    padding: 0.45rem 1.2rem;
+    border-radius: 999px;
+    font-weight: 600 !important;
+    transition: background 0.2s, transform 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--glow) !important; transform: scale(1.05); }
+  .nav-cta::after { display: none !important; }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    background: radial-gradient(ellipse 80% 70% at 50% 40%, #0d3320 0%, var(--forest) 60%, var(--deep) 100%);
+  }
+  #particle-canvas {
+    position: absolute; inset: 0;
+    pointer-events: none;
+  }
+  .hero-inner {
+    position: relative; z-index: 2;
+    text-align: center;
+    padding: 6rem 1.5rem 3rem;
+    max-width: 780px;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(76,175,120,0.15);
+    border: 1px solid rgba(76,175,120,0.4);
+    border-radius: 999px;
+    padding: 0.35rem 1rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mint);
+    margin-bottom: 1.5rem;
+    animation: fadeDown 0.8s ease both;
+  }
+  .hero-badge::before {
+    content: '';
+    width: 7px; height: 7px;
+    background: var(--mint);
+    border-radius: 50%;
+    animation: pulse-dot 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%,100%{ box-shadow: 0 0 0 0 rgba(76,175,120,0.7); }
+    50%{ box-shadow: 0 0 0 6px rgba(76,175,120,0); }
+  }
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.4rem, 10vw, 7.5rem);
+    font-weight: 900;
+    line-height: 0.92;
+    letter-spacing: -2px;
+    color: var(--white);
+    animation: fadeUp 0.9s 0.1s ease both;
+  }
+  .hero-name .neon {
+    color: var(--glow);
+    text-shadow: 0 0 30px rgba(125,255,176,0.6), 0 0 80px rgba(125,255,176,0.25);
+  }
+  .hero-tagline {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    color: var(--lime);
+    margin-top: 1rem;
+    animation: fadeUp 0.9s 0.25s ease both;
+  }
+  .hero-desc {
+    margin-top: 1.2rem;
+    font-size: 1rem;
+    color: rgba(242,251,245,0.65);
+    line-height: 1.7;
+    max-width: 460px;
+    margin-left: auto; margin-right: auto;
+    animation: fadeUp 0.9s 0.4s ease both;
+  }
+  .hero-btns {
+    margin-top: 2.2rem;
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 0.9s 0.55s ease both;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--mint), var(--mid));
+    color: var(--deep);
+    padding: 0.85rem 2.2rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    box-shadow: 0 8px 30px rgba(76,175,120,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(76,175,120,0.55); }
+  .btn-outline {
+    border: 1.5px solid rgba(168,230,190,0.5);
+    color: var(--lime);
+    padding: 0.85rem 2.2rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--glow); color: var(--glow); transform: translateY(-3px); }
+
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+    color: rgba(168,230,190,0.5);
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    animation: bounce 2.2s ease-in-out infinite;
+  }
+  .hero-scroll svg { width: 18px; height: 18px; }
+  @keyframes bounce {
+    0%,100%{ transform: translateX(-50%) translateY(0); }
+    50%{ transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* ── SECTION SHARED ── */
+  section { padding: 6rem 1.5rem; }
+  .section-label {
+    display: inline-block;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--mint);
+    margin-bottom: 0.6rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--white);
+  }
+  .section-title em { font-style: italic; color: var(--glow); }
+  .section-sub {
+    margin-top: 0.9rem;
+    color: rgba(242,251,245,0.55);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 520px;
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    background: linear-gradient(to bottom, var(--forest), var(--deep));
+  }
+  .about-grid {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  }
+  .about-visual {
+    position: relative;
+  }
+  .about-card-bg {
+    background: linear-gradient(135deg, rgba(29,92,53,0.5), rgba(10,31,16,0.8));
+    border: 1px solid rgba(76,175,120,0.22);
+    border-radius: 24px;
+    padding: 2.5rem;
+    backdrop-filter: blur(8px);
+  }
+  .about-icon-row {
+    display: flex; gap: 1rem; margin-bottom: 1.5rem;
+  }
+  .about-icon {
+    width: 52px; height: 52px;
+    background: rgba(76,175,120,0.15);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+    border: 1px solid rgba(76,175,120,0.25);
+    transition: background 0.3s, transform 0.3s;
+    cursor: default;
+  }
+  .about-icon:hover { background: rgba(76,175,120,0.3); transform: scale(1.1) rotate(5deg); }
+  .about-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .about-stat {
+    background: rgba(13,40,24,0.7);
+    border-radius: 14px;
+    padding: 1.2rem;
+    border: 1px solid rgba(76,175,120,0.15);
+    text-align: center;
+  }
+  .about-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; font-weight: 900;
+    color: var(--glow);
+    line-height: 1;
+  }
+  .about-stat-label {
+    font-size: 0.78rem; color: rgba(242,251,245,0.5);
+    margin-top: 0.3rem;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .about-text { }
+  .about-para {
+    color: rgba(242,251,245,0.65);
+    font-size: 1rem; line-height: 1.8;
+    margin-top: 1rem;
+  }
+  .founder-tag {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    margin-top: 1.8rem;
+    background: rgba(76,175,120,0.12);
+    border: 1px solid rgba(76,175,120,0.3);
+    border-radius: 999px;
+    padding: 0.55rem 1.2rem;
+  }
+  .founder-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--mint), var(--mid));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+  }
+  .founder-name {
+    font-size: 0.85rem;
+    color: var(--lime);
+    font-weight: 600;
+  }
+  .founder-role {
+    font-size: 0.72rem;
+    color: rgba(168,230,190,0.5);
+  }
+
+  /* ── MENU ── */
+  #menu {
+    background: var(--deep);
+    position: relative;
+    overflow: hidden;
+  }
+  #menu::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(76,175,120,0.5), transparent);
+  }
+  .menu-header { text-align: center; margin-bottom: 3rem; }
+  .menu-header .section-sub { margin-left: auto; margin-right: auto; }
+
+  .nonveg-legend {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(230, 57, 70, 0.12);
+    border: 1px solid rgba(230, 57, 70, 0.3);
+    border-radius: 999px;
+    padding: 0.35rem 1rem;
+    font-size: 0.78rem;
+    color: #ff8a92;
+    margin-top: 1rem;
+  }
+  .nonveg-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%; background: var(--red);
+    display: inline-block;
+    box-shadow: 0 0 6px rgba(230, 57, 70, 0.7);
+  }
+
+  /* tabs */
+  .menu-tabs {
+    display: flex; gap: 0.5rem; flex-wrap: wrap;
+    justify-content: center; margin-bottom: 2.5rem;
+  }
+  .tab-btn {
+    background: rgba(29,92,53,0.2);
+    border: 1px solid rgba(76,175,120,0.2);
+    color: rgba(168,230,190,0.6);
+    padding: 0.55rem 1.4rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .tab-btn:hover, .tab-btn.active {
+    background: var(--mint);
+    border-color: var(--mint);
+    color: var(--deep);
+    box-shadow: 0 4px 18px rgba(76,175,120,0.3);
+  }
+
+  /* menu grid */
+  .menu-grid {
+    max-width: 1100px; margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 1.4rem;
+  }
+  .menu-category { display: none; }
+  .menu-category.visible { display: contents; }
+
+  .menu-card {
+    background: linear-gradient(135deg, rgba(22,60,36,0.6), rgba(10,31,16,0.9));
+    border: 1px solid rgba(76,175,120,0.15);
+    border-radius: 20px;
+    padding: 1.6rem;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    animation: cardIn 0.5s ease both;
+  }
+  .menu-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--mid), var(--mint));
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .menu-card:hover { transform: translateY(-6px); border-color: rgba(76,175,120,0.4); box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 20px rgba(76,175,120,0.08); }
+  .menu-card:hover::before { opacity: 1; }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 0.9rem;
+  }
+  .card-emoji {
+    font-size: 2.2rem;
+    line-height: 1;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));
+  }
+  .card-badge {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.7rem;
+    background: rgba(230, 57, 70, 0.15);
+    border: 1px solid rgba(230, 57, 70, 0.3);
+    border-radius: 999px;
+    padding: 0.2rem 0.6rem;
+    color: #ff8a92;
+  }
+  .card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.35rem;
+  }
+  .card-desc {
+    font-size: 0.83rem;
+    color: rgba(242,251,245,0.5);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  .card-tags {
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+    margin-bottom: 1.1rem;
+  }
+  .card-tag {
+    background: rgba(76,175,120,0.12);
+    border: 1px solid rgba(76,175,120,0.2);
+    border-radius: 999px;
+    padding: 0.15rem 0.65rem;
+    font-size: 0.7rem;
+    color: var(--mint);
+  }
+  .card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(76,175,120,0.12);
+    padding-top: 1rem;
+  }
+  .card-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--glow);
+  }
+  .card-price sup { font-size: 0.75rem; vertical-align: super; }
+  .card-spice {
+    display: flex; gap: 2px;
+  }
+  .spice-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: rgba(244,196,48,0.3);
+  }
+  .spice-dot.on { background: var(--gold); box-shadow: 0 0 4px rgba(244,196,48,0.6); }
+
+  /* ── SPECIALS ── */
+  #specials {
+    background: linear-gradient(to bottom, var(--deep), #071508);
+  }
+  .specials-grid {
+    max-width: 1100px; margin: 3rem auto 0;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 1.6rem;
+  }
+  .special-card {
+    background: linear-gradient(145deg, rgba(26,92,53,0.35), rgba(10,31,16,0.8));
+    border: 1px solid rgba(76,175,120,0.25);
+    border-radius: 24px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.35s, box-shadow 0.35s;
+  }
+  .special-card:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 40px rgba(76,175,120,0.1); }
+  .special-card.featured {
+    border-color: rgba(125,255,176,0.4);
+    background: linear-gradient(145deg, rgba(26,92,53,0.55), rgba(10,31,16,0.9));
+  }
+  .special-crown {
+    position: absolute; top: 1.2rem; right: 1.2rem;
+    font-size: 1.4rem;
+  }
+  .special-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: rgba(76,175,120,0.15);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    user-select: none;
+  }
+  .special-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+  .special-desc {
+    font-size: 0.88rem;
+    color: rgba(242,251,245,0.5);
+    line-height: 1.7;
+  }
+  .special-price {
+    margin-top: 1.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--glow);
+  }
+  .featured-pill {
+    display: inline-block;
+    background: linear-gradient(90deg, var(--mint), var(--mid));
+    color: var(--deep);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.8rem;
+    border-radius: 999px;
+    margin-bottom: 1rem;
+  }
+
+  /* ── VISIT ── */
+  #visit {
+    background: var(--deep);
+    position: relative;
+  }
+  .visit-grid {
+    max-width: 1100px; margin: 3rem auto 0;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;
+  }
+  .info-card {
+    background: rgba(13,40,24,0.6);
+    border: 1px solid rgba(76,175,120,0.18);
+    border-radius: 20px;
+    padding: 2rem;
+  }
+  .info-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--white);
+    margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .info-row {
+    display: flex; gap: 1rem; align-items: flex-start;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(76,175,120,0.1);
+  }
+  .info-row:last-child { border-bottom: none; }
+  .info-icon { font-size: 1.1rem; margin-top: 0.1rem; }
+  .info-text { font-size: 0.9rem; color: rgba(242,251,245,0.65); line-height: 1.5; }
+  .info-text strong { color: var(--lime); font-weight: 600; }
+  .map-placeholder {
+    background: linear-gradient(135deg, rgba(13,40,24,0.8), rgba(10,31,16,0.9));
+    border: 1px solid rgba(76,175,120,0.18);
+    border-radius: 20px;
+    height: 100%;
+    min-height: 280px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1rem;
+    cursor: pointer;
+    transition: border-color 0.3s;
+    text-decoration: none;
+  }
+  .map-placeholder:hover { border-color: rgba(76,175,120,0.4); }
+  .map-pin-anim {
+    font-size: 3rem;
+    animation: mapBounce 2s ease-in-out infinite;
+  }
+  @keyframes mapBounce {
+    0%,100%{ transform: translateY(0); }
+    40%{ transform: translateY(-12px); }
+    60%{ transform: translateY(-6px); }
+  }
+  .map-label { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--lime); }
+  .map-sub { font-size: 0.8rem; color: rgba(168,230,190,0.4); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--deep);
+    border-top: 1px solid rgba(76,175,120,0.15);
+    padding: 3rem 1.5rem;
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--glow);
+    text-shadow: 0 0 20px rgba(125,255,176,0.4);
+    margin-bottom: 0.5rem;
+  }
+  .footer-tagline {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.3rem;
+    color: var(--lime);
+    opacity: 0.7;
+    margin-bottom: 1.5rem;
+  }
+  .footer-links {
+    display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .footer-links a {
+    color: rgba(168,230,190,0.5);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--glow); }
+  .footer-copy {
+    font-size: 0.78rem;
+    color: rgba(168,230,190,0.25);
+  }
+  .footer-heart { color: var(--mint); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    nav { padding: 0.9rem 1.2rem; }
+    .nav-links { display: none; }
+    .about-grid, .visit-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .about-visual { order: -1; }
+    section { padding: 4rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="#hero" class="nav-logo">The <span>Neff</span>lix</a>
+  <ul class="nav-links">
+    <li><a href="#about">Our Story</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#specials">Chef's Picks</a></li>
+    <li><a href="#visit" class="nav-cta">Visit Us</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <canvas id="particle-canvas"></canvas>
+  <div class="hero-inner">
+    <div class="hero-badge">✦ Now Open · Mini Café · Non-Veg</div>
+    <h1 class="hero-name">
+      The&nbsp;<span class="neon">Nefflix</span>
+    </h1>
+    <p class="hero-tagline">" Happy you, Happy us "</p>
+    <p class="hero-desc">A cozy corner of bold flavours, crafted with love by a young woman who believes every bite should tell a story. Come hungry, leave happy.</p>
+    <div class="hero-btns">
+      <a href="#menu" class="btn-primary">Explore the Menu</a>
+      <a href="#visit" class="btn-outline">Find Us</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    Scroll
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <div class="about-card-bg">
+        <div class="about-icon-row">
+          <div class="about-icon">🍗</div>
+          <div class="about-icon">🔥</div>
+          <div class="about-icon">🌿</div>
+          <div class="about-icon">🍳</div>
+        </div>
+        <div class="about-stat-grid">
+          <div class="about-stat">
+            <div class="about-stat-num">30+</div>
+            <div class="about-stat-label">Menu Items</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num">100%</div>
+            <div class="about-stat-label">Fresh Daily</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num">★ 4.9</div>
+            <div class="about-stat-label">Happy Guests</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num">0</div>
+            <div class="about-stat-label">Dull Meals</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="about-text reveal">
+      <span class="section-label">Our Story</span>
+      <h2 class="section-title">Born from a <em>kitchen</em> full of heart</h2>
+      <p class="about-para">The Nefflix started as a dream on a notepad — a little café where every person walking in feels like a regular, every dish feels like a hug, and every rupee spent feels worth it ten times over.</p>
+      <p class="about-para">We keep it real: freshly sourced meats, bold marinades, and zero shortcuts. Our non-veg kitchen is a celebration of spice, smoke, and soul — curated personally every single day.</p>
+      <div class="founder-tag">
+        <div class="founder-avatar">👩‍🍳</div>
+        <div>
+          <div class="founder-name">Ms. Angel</div>
+          <div class="founder-role">Founder & Chef · The Nefflix</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MENU ── -->
+<section id="menu">
+  <div class="menu-header reveal">
+    <span class="section-label">Our Menu</span>
+    <h2 class="section-title">Bold flavours, <em>real stories</em></h2>
+    <p class="section-sub">Every item is a non-veg classic given a Nefflix twist — crafted fresh, served fast, loved always.</p>
+    <div class="nonveg-legend">
+      <span class="nonveg-dot"></span>
+      All items are Non-Vegetarian
+    </div>
+  </div>
+
+  <div class="menu-tabs">
+    <button class="tab-btn active" data-cat="all">All Items</button>
+    <button class="tab-btn" data-cat="starters">🍢 Starters</button>
+    <button class="tab-btn" data-cat="mains">🍛 Mains</button>
+    <button class="tab-btn" data-cat="burgers">🍔 Burgers & Wraps</button>
+    <button class="tab-btn" data-cat="rice">🍚 Rice & Noodles</button>
+    <button class="tab-btn" data-cat="soups">🥣 Soups & Sips</button>
+  </div>
+
+  <div class="menu-grid" id="menuGrid"></div>
+</section>
+
+<!-- ── SPECIALS ── -->
+<section id="specials">
+  <div class="reveal" style="text-align:center">
+    <span class="section-label">Chef's Picks</span>
+    <h2 class="section-title">The Nefflix <em>Signatures</em></h2>
+    <p class="section-sub" style="margin:0 auto">Dishes our chef is most proud of. Made from scratch, every time.</p>
+  </div>
+  <div class="specials-grid">
+    <div class="special-card featured reveal">
+      <div class="special-crown">👑</div>
+      <div class="featured-pill">★ Best Seller</div>
+      <div class="special-num">01</div>
+      <div class="special-name">The Nefflix Special Biryani</div>
+      <div class="special-desc">A slow-cooked dum biryani layered with tender chicken, caramelized onions, saffron-kissed rice, and a secret house masala that'll keep you coming back every week.</div>
+      <div class="special-price"><sup>₹</sup>249</div>
+    </div>
+    <div class="special-card reveal">
+      <div class="special-num">02</div>
+      <div class="special-name">Smoky Devil Wings</div>
+      <div class="special-desc">Six crispy wings tossed in our fiery chipotle-chilli glaze with a cooling mint chutney on the side. The kind of wings you eat and then lick every finger.</div>
+      <div class="special-price"><sup>₹</sup>179</div>
+    </div>
+    <div class="special-card reveal">
+      <div class="special-num">03</div>
+      <div class="special-name">Prawn Butter Masala Bowl</div>
+      <div class="special-desc">Plump prawns in a rich, buttery tomato-cream masala served over steamed basmati. A coastal dream brought right to your table.</div>
+      <div class="special-price"><sup>₹</sup>229</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── VISIT ── -->
+<section id="visit">
+  <div class="reveal" style="text-align:center">
+    <span class="section-label">Find Us</span>
+    <h2 class="section-title">We're waiting <em>for you</em></h2>
+    <p class="section-sub" style="margin: 0 auto">Drop in, dine in, take away — however you like, we're ready.</p>
+  </div>
+  <div class="visit-grid">
+    <div class="info-card reveal">
+      <h3>📋 Info & Hours</h3>
+      <div class="info-row">
+        <span class="info-icon">📍</span>
+        <div class="info-text"><strong>Location</strong><br/>Pallavakkam Beach, Chennai</div>
+      </div>
+      <div class="info-row">
+        <span class="info-icon">🕐</span>
+        <div class="info-text">
+          <strong>Wed – Sun</strong>: 7:00 PM – 11:00 PM<br/>
+          <strong>Mon – Tue</strong>: Closed
+        </div>
+      </div>
+      <div class="info-row">
+        <span class="info-icon">📞</span>
+        <div class="info-text"><strong>+91 98765 43210</strong><br/>Call ahead or just walk in!</div>
+      </div>
+      <div class="info-row">
+        <span class="info-icon">📸</span>
+        <div class="info-text"><strong>@TheNefflixCafe</strong><br/>Tag us in your food pictures!</div>
+      </div>
+    </div>
+    <a href="https://maps.google.com" target="_blank" class="map-placeholder reveal">
+      <div class="map-pin-anim">📍</div>
+      <div class="map-label">Open in Maps</div>
+      <div class="map-sub">Pallavakkam Beach, Chennai</div>
+    </a>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">The Nefflix</div>
+  <div class="footer-tagline">" Happy you, Happy us "</div>
+  <div class="footer-links">
+    <a href="#about">Our Story</a>
+    <a href="#menu">Menu</a>
+    <a href="#specials">Chef's Picks</a>
+    <a href="#visit">Visit Us</a>
+    <a href="#">Instagram</a>
+  </div>
+  <div class="footer-copy">© 2024 The Nefflix · Made with <span class="footer-heart">♥</span> by a young woman with a dream</div>
+</footer>
+
+<script>
+/* ───── PARTICLE CANVAS ───── */
+(function(){
+  const canvas = document.getElementById('particle-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize(){
+    W = canvas.width  = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // leaf shape path
+  function drawLeaf(ctx, x, y, size, angle, alpha){
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+    ctx.beginPath();
+    ctx.moveTo(0, -size);
+    ctx.bezierCurveTo(size * 0.8, -size * 0.5, size * 0.8, size * 0.5, 0, size);
+    ctx.bezierCurveTo(-size * 0.8, size * 0.5, -size * 0.8, -size * 0.5, 0, -size);
+    ctx.fillStyle = `hsl(${140 + Math.random()*20}, 60%, ${40 + Math.random()*20}%)`;
+    ctx.fill();
+    // vein
+    ctx.beginPath();
+    ctx.moveTo(0, -size * 0.8);
+    ctx.lineTo(0, size * 0.8);
+    ctx.strokeStyle = `rgba(125,255,176,0.25)`;
+    ctx.lineWidth = 0.6;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  class Particle {
+    constructor(){
+      this.reset(true);
+    }
+    reset(init){
+      this.x = Math.random() * (W || 1400);
+      this.y = init ? Math.random() * (H || 900) : (H || 900) + 20;
+      this.size = 4 + Math.random() * 10;
+      this.speedY = -(0.15 + Math.random() * 0.35);
+      this.speedX = (Math.random() - 0.5) * 0.4;
+      this.angle = Math.random() * Math.PI * 2;
+      this.spin = (Math.random() - 0.5) * 0.012;
+      this.alpha = 0.12 + Math.random() * 0.28;
+      this.sway = Math.random() * Math.PI * 2;
+    }
+    update(){
+      this.y += this.speedY;
+      this.sway += 0.012;
+      this.x += this.speedX + Math.sin(this.sway) * 0.3;
+      this.angle += this.spin;
+      if(this.y < -20) this.reset(false);
+    }
+    draw(){
+      drawLeaf(ctx, this.x, this.y, this.size, this.angle, this.alpha);
+    }
+  }
+
+  for(let i = 0; i < 55; i++) particles.push(new Particle());
+
+  function loop(){
+    ctx.clearRect(0,0,W,H);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+/* ───── MENU DATA ───── */
+const menuData = [
+  // STARTERS
+  { cat: 'starters', emoji: '🍗', name: 'Crispy Chicken Wings', desc: 'Six wings deep-fried to a golden crunch, served with fiery dip.', tags: ['Spicy','Fried'], price: '149', spice: 3 },
+  { cat: 'starters', emoji: '🐟', name: 'Fish Fingers', desc: 'Basa fillets in a herby breadcrumb coat, pan-fried and crisp.', tags: ['Mild','Crispy'], price: '139', spice: 2 },
+  { cat: 'starters', emoji: '🥚', name: 'Masala Egg Puffs (2 pcs)', desc: 'Flaky puff pastry stuffed with a spiced egg-onion filling.', tags: ['Baked','Classic'], price: '60', spice: 2 },
+  { cat: 'starters', emoji: '🥩', name: 'Mutton Samosa (3 pcs)', desc: 'Golden crisp cones packed with spiced minced mutton.', tags: ['Fried','Street Food'], price: '99', spice: 3 },
+  { cat: 'starters', emoji: '🍤', name: 'Pepper Prawn Fry', desc: 'Succulent prawns tossed in cracked black pepper and butter.', tags: ['Butter','Pepper'], price: '179', spice: 3 },
+  { cat: 'starters', emoji: '🐓', name: 'Chicken Lollipop (6 pcs)', desc: 'Drumlets marinated in Indo-Chinese sauce, deep fried.', tags: ['Indo-Chinese','Spicy'], price: '169', spice: 4 },
+
+  // MAINS
+  { cat: 'mains', emoji: '🍛', name: 'Chicken Chettinad Curry', desc: 'Authentic Chettinad spices with bone-in chicken, slow-cooked.', tags: ['Regional','Bold'], price: '199', spice: 4 },
+  { cat: 'mains', emoji: '🐑', name: 'Mutton Rogan Josh', desc: 'Tender mutton in a Kashmiri gravy layered with whole spices.', tags: ['Kashmiri','Rich'], price: '229', spice: 3 },
+  { cat: 'mains', emoji: '🦐', name: 'Prawn Butter Masala', desc: 'Juicy prawns in a velvety tomato-cream-butter sauce.', tags: ['Butter','Rich'], price: '219', spice: 2 },
+  { cat: 'mains', emoji: '🍗', name: 'Kadai Chicken', desc: 'Stir-fried chicken with bell peppers and kadai masala.', tags: ['Stir-Fry','Spicy'], price: '189', spice: 3 },
+
+  // BURGERS
+  { cat: 'burgers', emoji: '🍔', name: 'Chicken Zinger Burger', desc: 'Crispy spiced fillet, shredded slaw, jalapeño mayo on a brioche.', tags: ['Burger','Crispy'], price: '149', spice: 3 },
+  { cat: 'burgers', emoji: '🌯', name: 'Grilled Chicken Wrap', desc: 'Chargrilled strips, hummus, pickled onion, greens in a wheat tortilla.', tags: ['Wrap','Grilled'], price: '129', spice: 2 },
+  { cat: 'burgers', emoji: '🥚', name: 'Egg & Cheese Burger', desc: 'Double fried egg, cheddar, mustard relish on a toasted sesame bun.', tags: ['Egg','Classic'], price: '99', spice: 1 },
+  { cat: 'burgers', emoji: '🍔', name: 'Mutton Smash Burger', desc: 'Two smashed mutton patties with caramelized onion and green sauce.', tags: ['Smash','Bold'], price: '189', spice: 2 },
+
+  // RICE
+  { cat: 'rice', emoji: '🍚', name: 'The Nefflix Dum Biryani', desc: 'Saffron rice, dum-cooked over tender chicken, served with raita.', tags: ['Dum','Signature'], price: '229', spice: 3 },
+  { cat: 'rice', emoji: '🦐', name: 'Prawn Fried Rice', desc: 'Wok-tossed basmati with prawns, spring onion, soy, and egg.', tags: ['Wok','Indo-Chinese'], price: '179', spice: 2 },
+  { cat: 'rice', emoji: '🍜', name: 'Chicken Hakka Noodles', desc: 'Stir-fried noodles with chicken, capsicum, soy, and chilli oil.', tags: ['Indo-Chinese','Quick'], price: '159', spice: 3 },
+  { cat: 'rice', emoji: '🍳', name: 'Egg Pepper Rice', desc: 'Steamed rice stir-fried with egg, black pepper, garlic, and curry leaves.', tags: ['Comfort','Quick'], price: '99', spice: 2 },
+
+  // SOUPS
+  { cat: 'soups', emoji: '🥣', name: 'Clear Chicken Soup', desc: 'A clean, golden broth with shredded chicken and fresh herbs.', tags: ['Mild','Healing'], price: '79', spice: 1 },
+  { cat: 'soups', emoji: '🥚', name: 'Egg Drop Soup', desc: 'Classic silky soup with ribbons of egg, corn, and spring onion.', tags: ['Mild','Indo-Chinese'], price: '69', spice: 1 },
+  { cat: 'soups', emoji: '🍖', name: 'Mutton Bone Broth', desc: 'Slow-simmered marrow broth with ginger, pepper, and lime.', tags: ['Rich','Warm'], price: '99', spice: 2 },
+];
+
+/* ───── RENDER MENU ───── */
+function spiceHtml(n){
+  let dots = '';
+  for(let i=1;i<=4;i++) dots += `<div class="spice-dot${i<=n?' on':''}"></div>`;
+  return `<div class="card-spice">${dots}</div>`;
+}
+
+function renderMenu(cat){
+  const grid = document.getElementById('menuGrid');
+  grid.innerHTML = '';
+  const cats = cat === 'all' ? ['starters','mains','burgers','rice','soups'] : [cat];
+  cats.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'menu-category visible';
+    menuData.filter(i => i.cat === c).forEach((item, idx) => {
+      div.innerHTML += `
+      <div class="menu-card" style="animation-delay:${idx*0.07}s">
+        <div class="card-top">
+          <div class="card-emoji">${item.emoji}</div>
+          <div class="card-badge"><span class="nonveg-dot"></span> Non-Veg</div>
+        </div>
+        <div class="card-name">${item.name}</div>
+        <div class="card-desc">${item.desc}</div>
+        <div class="card-tags">${item.tags.map(t=>`<span class="card-tag">${t}</span>`).join('')}</div>
+        <div class="card-footer">
+          <div class="card-price"><sup>₹</sup>${item.price}</div>
+          ${spiceHtml(item.spice)}
+        </div>
+      </div>`;
+    });
+    grid.appendChild(div);
+  });
+}
+renderMenu('all');
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderMenu(btn.dataset.cat);
+  });
+});
+
+/* ───── SCROLL REVEAL ───── */
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); }});
+}, { threshold: 0.1 });
+reveals.forEach(r => io.observe(r));
+
+/* ───── NAV SHRINK ───── */
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  nav.style.padding = window.scrollY > 60 ? '0.6rem 2.5rem' : '';
+});
+</script>
+</body>
+</html>
